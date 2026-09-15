@@ -1,3 +1,8 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+
+# Runtime save data
+data/saves/*
+!data/saves/.gitkeep
+
