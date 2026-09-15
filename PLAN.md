@@ -8,11 +8,11 @@ See `AGENTS.md` for architectural rules that apply throughout, and the architect
 
 ## Phase 0 — Skeleton
 
-- [ ] Create full folder structure (`autoloads/`, `resources/`, `data/`, `scenes/ui/...`, `scenes/entities/...`, `scenes/levels/...`, `assets/...`)
-- [ ] Register autoload scripts in Project Settings (order: EventBus, GameManager, SettingsManager, SaveManager, AchievementManager, AudioManager)
-- [ ] Define initial Input Map actions (movement, jump, pause) — unbound keys are fine for now
-- [ ] Write `EventBus.gd` — signal declarations only, no logic
-- [ ] Install GUT (`addons/gut/`), enable the plugin, create `tests/unit/` and `tests/helpers/` folders
+- [x] Create full folder structure (`autoloads/`, `resources/`, `data/`, `scenes/ui/...`, `scenes/entities/...`, `scenes/levels/...`, `assets/...`)
+- [x] Register autoload scripts in Project Settings (order: EventBus, GameManager, SettingsManager, SaveManager, AchievementManager, AudioManager)
+- [x] Define initial Input Map actions (movement, jump, pause) — unbound keys are fine for now
+- [x] Write `EventBus.gd` — signal declarations only, no logic
+- [x] Install GUT (`addons/gut/`), enable the plugin, create `tests/unit/` and `tests/helpers/` folders
 
 **Definition of Done:** Project opens with no errors; all autoloads are registered and empty/stubbed; `EventBus` signals are declared and visible in code completion elsewhere; GUT panel appears in the editor and runs an empty test suite successfully.
 
@@ -21,12 +21,12 @@ See `AGENTS.md` for architectural rules that apply throughout, and the architect
 ## Phase 1 — Foundational Managers
 
 ### 1. SettingsManager
-- [ ] Define `SettingsData` Resource (master/music/sfx volume, keybind map, video options)
-- [ ] Load/save `SettingsData` to its own file, separate from save games
-- [ ] Apply volume values to audio buses
-- [ ] Apply keybind values to `InputMap`
-- [ ] Expose `reset_to_default()`
-- [ ] Write `tests/unit/test_settings_manager.gd` covering volume changes, keybind changes, and reset-to-default
+- [x] Define `SettingsData` Resource (master/music/sfx volume, keybind map, video options)
+- [x] Load/save `SettingsData` to its own file, separate from save games
+- [x] Apply volume values to audio buses
+- [x] Apply keybind values to `InputMap`
+- [x] Expose `reset_to_default()`
+- [x] Write `tests/unit/test_settings_manager.gd` covering volume changes, keybind changes, and reset-to-default
 
 **Definition of Done:** Changing a value via a debug script or inspector call persists across a full editor restart; `test_settings_manager.gd` passes under GUT.
 

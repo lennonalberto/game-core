@@ -14,6 +14,10 @@ config/name="game-core"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gut/plugin.cfg")
+
 [autoload]
 
 EventBus="*res://autoloads/event_bus.gd"
@@ -22,6 +26,10 @@ SettingsManager="*res://autoloads/settings_manager.gd"
 SaveManager="*res://autoloads/save_manager.gd"
 AchievementManager="*res://autoloads/achievement_manager.gd"
 AudioManager="*res://autoloads/audio_manager.gd"
+
+[audio]
+
+buses/default_bus_layout="res://default_bus_layout.tres"
 
 [display]
 
