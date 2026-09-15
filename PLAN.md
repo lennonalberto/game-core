@@ -8,12 +8,13 @@ See `AGENTS.md` for architectural rules that apply throughout, and the architect
 
 ## Phase 0 — Skeleton
 
-- [x] Create full folder structure (`autoloads/`, `resources/`, `data/`, `scenes/ui/...`, `scenes/entities/...`, `scenes/levels/...`, `assets/...`)
-- [x] Register autoload scripts in Project Settings (order: EventBus, GameManager, SettingsManager, SaveManager, AchievementManager, AudioManager)
-- [x] Define initial Input Map actions (movement, jump, pause) — unbound keys are fine for now
-- [x] Write `EventBus.gd` — signal declarations only, no logic
+- [ ] Create full folder structure (`autoloads/`, `resources/`, `data/`, `scenes/ui/...`, `scenes/entities/...`, `scenes/levels/...`, `assets/...`)
+- [ ] Register autoload scripts in Project Settings (order: EventBus, GameManager, SettingsManager, SaveManager, AchievementManager, AudioManager)
+- [ ] Define initial Input Map actions (movement, jump, pause) — unbound keys are fine for now
+- [ ] Write `EventBus.gd` — signal declarations only, no logic
+- [ ] Install GUT (`addons/gut/`), enable the plugin, create `tests/unit/` and `tests/helpers/` folders
 
-**Definition of Done:** Project opens with no errors; all autoloads are registered and empty/stubbed; `EventBus` signals are declared and visible in code completion elsewhere.
+**Definition of Done:** Project opens with no errors; all autoloads are registered and empty/stubbed; `EventBus` signals are declared and visible in code completion elsewhere; GUT panel appears in the editor and runs an empty test suite successfully.
 
 ---
 
@@ -25,16 +26,18 @@ See `AGENTS.md` for architectural rules that apply throughout, and the architect
 - [ ] Apply volume values to audio buses
 - [ ] Apply keybind values to `InputMap`
 - [ ] Expose `reset_to_default()`
+- [ ] Write `tests/unit/test_settings_manager.gd` covering volume changes, keybind changes, and reset-to-default
 
-**Definition of Done:** Changing a value via a debug script or inspector call persists across a full editor restart.
+**Definition of Done:** Changing a value via a debug script or inspector call persists across a full editor restart; `test_settings_manager.gd` passes under GUT.
 
 ### 2. SaveManager
 - [ ] Define `SaveData` Resource (player state, level id, collected items, playtime, version field)
 - [ ] Implement save/load to file, support multiple slots
 - [ ] Implement `"saveable"` group iteration — call `get_save_data()` / `apply_save_data()` on all members
-- [ ] Test with one dummy saveable node (no real gameplay yet)
+- [ ] Test with one dummy saveable node (no real gameplay yet) — implement as `tests/helpers/dummy_saveable.gd`
+- [ ] Write `tests/unit/test_save_manager.gd` covering round-trip save/load, multiple slots not clobbering each other, and graceful failure on a missing/corrupt file
 
-**Definition of Done:** Save then load round-trips the dummy node's state correctly after a restart.
+**Definition of Done:** Save then load round-trips the dummy node's state correctly after a restart; `test_save_manager.gd` passes under GUT.
 
 ### 3. AchievementManager
 - [ ] Define `AchievementDefinition` Resource (id, title, description, icon, condition type/target)
@@ -43,15 +46,17 @@ See `AGENTS.md` for architectural rules that apply throughout, and the architect
 - [ ] Persist unlocked/progress state to its own file (separate from save slots)
 - [ ] Expose `unlock(id)`, `is_unlocked(id)`, `add_progress(id, amount)`
 - [ ] Connect to relevant `EventBus` signals (even if nothing emits them yet)
+- [ ] Write `tests/unit/test_achievement_manager.gd` covering progress accumulation, single-fire unlock signal, and persistence after reload
 
-**Definition of Done:** Manually calling `unlock()` on a sample achievement persists across restart.
+**Definition of Done:** Manually calling `unlock()` on a sample achievement persists across restart; `test_achievement_manager.gd` passes under GUT.
 
 ### 4. AudioManager
 - [ ] Expose `play_sfx(id)`, `play_music(id)`, `stop_music()`
 - [ ] Read volume levels from `SettingsManager`
 - [ ] React to `EventBus.settings_changed` (or equivalent) to update live volume
+- [ ] Write `tests/unit/test_audio_manager.gd` covering that bus volume reads correctly from `SettingsManager`
 
-**Definition of Done:** Playing a sound respects current volume settings; changing volume mid-playback updates it live.
+**Definition of Done:** Playing a sound respects current volume settings; changing volume mid-playback updates it live; `test_audio_manager.gd` passes under GUT.
 
 ---
 
@@ -126,6 +131,7 @@ See `AGENTS.md` for architectural rules that apply throughout, and the architect
 - [ ] Multiple save slots don't overwrite each other
 - [ ] No autoload holds a direct reference to another autoload where a signal would do (spot-check against `AGENTS.md` rules)
 - [ ] No gameplay node reaches directly into UI or vice versa
+- [ ] Full GUT suite (`tests/unit/`) passes headless in one run
 
 **Definition of Done:** A fresh clone of the repo, run from a clean state, supports the full menu → play → save → settings → achievements loop with no manual setup beyond opening the project.
 
@@ -136,3 +142,4 @@ See `AGENTS.md` for architectural rules that apply throughout, and the architect
 - Treat each numbered item as one task — verify its Definition of Done before starting the next.
 - If implementing an item requires inventing a signal or method not already specified, stop and flag it rather than guessing silently.
 - Do not skip ahead to Phase 3 UI for a system whose Phase 1/2 signals don't exist yet.
+- A Phase 1 manager item is not done until its test file exists and passes — see `AGENTS.md` Testing Expectations.

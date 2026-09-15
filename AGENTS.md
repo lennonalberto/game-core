@@ -58,12 +58,17 @@ If a new file doesn't obviously belong in one of these, ask before inventing a n
 
 ## Testing Expectations
 
-- After adding or changing a manager, manually verify (or write a `res://tests` scene, if a test setup exists) that:
-  - Saving then loading round-trips correctly.
-  - Rebinding a key persists across a restart.
-  - Volume changes persist across a restart.
-  - Triggering the relevant EventBus signal actually unlocks the achievement it should.
-- When adding a new "saveable" node, confirm `SaveManager` didn't need code changes to support it — that's the point of the contract.
+- **Framework:** [GUT (Godot Unit Test)](https://github.com/bitwes/Gut), installed under `addons/gut/`. Tests are written in GDScript.
+- **Location:** `tests/unit/`, one file per manager, named `test_<manager_name>.gd`. Shared test fixtures (e.g. a minimal dummy node implementing the saveable contract) live in `tests/helpers/`.
+- **Every manager built in Phase 1 (SettingsManager, SaveManager, AchievementManager, AudioManager) must ship with a corresponding test file before that phase item is considered done.** This is not optional polish — it's part of the Definition of Done.
+- What to test (managers and contracts, not visuals):
+  - SaveManager: save → load round-trips a `SaveData` object correctly; multiple save slots don't clobber each other; loading a missing/corrupt file fails gracefully instead of crashing; a dummy `"saveable"` node's data is collected and restored without `SaveManager` referencing it directly.
+  - SettingsManager: setting a volume updates the correct `AudioServer` bus; rebinding a key updates `InputMap`; `reset_to_default()` restores baseline values.
+  - AchievementManager: progress accumulates correctly; unlocking an achievement fires its signal exactly once, not repeatedly; unlocked/progress state persists after a simulated reload.
+  - EventBus: signals exist with the parameter signatures other systems expect (a contract-drift check, not behavior).
+- What NOT to test: UI layout/appearance, animations, gameplay feel (movement tuning, jump height) — verify those manually instead.
+- **When modifying a manager's behavior, update its test file in the same change.** A manager change without a corresponding test update should be treated as incomplete, not deferred.
+- Tests should be runnable headless (`--headless -s addons/gut/gut_cmdln.gd`) so they can be run without manual interaction in the editor.
 
 ## When Extending the Template
 
