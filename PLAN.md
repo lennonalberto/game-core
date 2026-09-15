@@ -31,11 +31,11 @@ See `AGENTS.md` for architectural rules that apply throughout, and the architect
 **Definition of Done:** Changing a value via a debug script or inspector call persists across a full editor restart; `test_settings_manager.gd` passes under GUT.
 
 ### 2. SaveManager
-- [ ] Define `SaveData` Resource (player state, level id, collected items, playtime, version field)
-- [ ] Implement save/load to file, support multiple slots
-- [ ] Implement `"saveable"` group iteration — call `get_save_data()` / `apply_save_data()` on all members
-- [ ] Test with one dummy saveable node (no real gameplay yet) — implement as `tests/helpers/dummy_saveable.gd`
-- [ ] Write `tests/unit/test_save_manager.gd` covering round-trip save/load, multiple slots not clobbering each other, and graceful failure on a missing/corrupt file
+- [x] Define `SaveData` Resource (player state, level id, collected items, playtime, version field)
+- [x] Implement save/load to file, support multiple slots
+- [x] Implement `"saveable"` group iteration — call `get_save_data()` / `apply_save_data()` on all members
+- [x] Test with one dummy saveable node (no real gameplay yet) — implement as `tests/helpers/dummy_saveable.gd`
+- [x] Write `tests/unit/test_save_manager.gd` covering round-trip save/load, multiple slots not clobbering each other, and graceful failure on a missing/corrupt file
 
 **Definition of Done:** Save then load round-trips the dummy node's state correctly after a restart; `test_save_manager.gd` passes under GUT.
 
