@@ -51,10 +51,10 @@ See `AGENTS.md` for architectural rules that apply throughout, and the architect
 **Definition of Done:** Manually calling `unlock()` on a sample achievement persists across restart; `test_achievement_manager.gd` passes under GUT.
 
 ### 4. AudioManager
-- [ ] Expose `play_sfx(id)`, `play_music(id)`, `stop_music()`
-- [ ] Read volume levels from `SettingsManager`
-- [ ] React to `EventBus.settings_changed` (or equivalent) to update live volume
-- [ ] Write `tests/unit/test_audio_manager.gd` covering that bus volume reads correctly from `SettingsManager`
+- [x] Expose `play_sfx(id)`, `play_music(id)`, `stop_music()`
+- [x] Read volume levels from `SettingsManager`
+- [x] React to `EventBus.settings_changed` (or equivalent) to update live volume
+- [x] Write `tests/unit/test_audio_manager.gd` covering that bus volume reads correctly from `SettingsManager`
 
 **Definition of Done:** Playing a sound respects current volume settings; changing volume mid-playback updates it live; `test_audio_manager.gd` passes under GUT.
 
