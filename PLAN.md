@@ -40,13 +40,13 @@ See `AGENTS.md` for architectural rules that apply throughout, and the architect
 **Definition of Done:** Save then load round-trips the dummy node's state correctly after a restart; `test_save_manager.gd` passes under GUT.
 
 ### 3. AchievementManager
-- [ ] Define `AchievementDefinition` Resource (id, title, description, icon, condition type/target)
-- [ ] Create 2–3 sample `.tres` achievement definitions in `data/achievements/`
-- [ ] Load definitions at startup, track progress in a runtime dict
-- [ ] Persist unlocked/progress state to its own file (separate from save slots)
-- [ ] Expose `unlock(id)`, `is_unlocked(id)`, `add_progress(id, amount)`
-- [ ] Connect to relevant `EventBus` signals (even if nothing emits them yet)
-- [ ] Write `tests/unit/test_achievement_manager.gd` covering progress accumulation, single-fire unlock signal, and persistence after reload
+- [x] Define `AchievementDefinition` Resource (id, title, description, icon, condition type/target)
+- [x] Create 2–3 sample `.tres` achievement definitions in `data/achievements/`
+- [x] Load definitions at startup, track progress in a runtime dict
+- [x] Persist unlocked/progress state to its own file (separate from save slots)
+- [x] Expose `unlock(id)`, `is_unlocked(id)`, `add_progress(id, amount)`
+- [x] Connect to relevant `EventBus` signals (even if nothing emits them yet)
+- [x] Write `tests/unit/test_achievement_manager.gd` covering progress accumulation, single-fire unlock signal, and persistence after reload
 
 **Definition of Done:** Manually calling `unlock()` on a sample achievement persists across restart; `test_achievement_manager.gd` passes under GUT.
 

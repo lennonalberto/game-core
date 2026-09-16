@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="AchievementDefinition" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://resources/achievements/achievement_definition.gd" id="1_achiev"]
+
+[resource]
+script = ExtResource("1_achiev")
+id = "coin_collector"
+title = "Treasure Hunter"
+description = "Collect 5 coins in the platformer demo."
+target_progress = 5
+is_hidden = false
