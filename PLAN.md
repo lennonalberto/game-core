@@ -63,16 +63,16 @@ See `AGENTS.md` for architectural rules that apply throughout, and the architect
 ## Phase 2 — Placeholder Gameplay
 
 ### 5. Player
-- [ ] Build the generic state machine framework under `scenes/entities/state_machine/`: `state_machine.gd` (holds `current_state`, connects to each child state's `transitioned` signal on `_ready()`, exposes `transition_to(state_name, msg := {})` and `current_state_name`) and `state.gd` (base class, `class_name State`, with `enter(msg := {})`, `exit()`, `physics_update(delta)`, `handle_input(event)`, and `signal transitioned(new_state_name, msg)`)
-- [ ] `CharacterBody2D` Player with `Sprite2D`, `CollisionShape2D`, `AnimationPlayer`, a `StateMachine` child node, and `HitboxComponent`
-- [ ] Player keeps tunable `@export` values (speed, gravity, jump_velocity); `_physics_process` delegates to `state_machine.current_state.physics_update(delta)` — no movement branching in `player.gd` itself
-- [ ] Implement four states under `scenes/entities/player/states/`: `idle_state.gd`, `run_state.gd`, `jump_state.gd`, `fall_state.gd`, each extending `State`
+- [x] Build the generic state machine framework under `scenes/entities/state_machine/`: `state_machine.gd` (holds `current_state`, connects to each child state's `transitioned` signal on `_ready()`, exposes `transition_to(state_name, msg := {})` and `current_state_name`) and `state.gd` (base class, `class_name State`, with `enter(msg := {})`, `exit()`, `physics_update(delta)`, `handle_input(event)`, and `signal transitioned(new_state_name, msg)`)
+- [x] `CharacterBody2D` Player with `Sprite2D`, `CollisionShape2D`, `AnimationPlayer`, a `StateMachine` child node, and `HitboxComponent`
+- [x] Player keeps tunable `@export` values (speed, gravity, jump_velocity); `_physics_process` delegates to `state_machine.current_state.physics_update(delta)` — no movement branching in `player.gd` itself
+- [x] Implement four states under `scenes/entities/player/states/`: `idle_state.gd`, `run_state.gd`, `jump_state.gd`, `fall_state.gd`, each extending `State`
   - Idle → Run (direction input), Idle → Fall (not on floor), Idle → Jump (jump pressed)
   - Run → Idle (no direction), Run → Fall (not on floor), Run → Jump (jump pressed)
   - Jump `enter()`: set vertical velocity, emit `EventBus.player_jumped`; transitions to Fall once velocity.y crosses zero
   - Fall: applies gravity; on `is_on_floor()` transitions to Idle or Run depending on input, emits `EventBus.player_landed`
-- [ ] States (not the state machine or Player) emit gameplay `EventBus` signals (`player_jumped`, `player_landed`, `player_died`) — each state is the source of truth for when its own event is real
-- [ ] Join `"saveable"` group; implement `get_save_data()` / `apply_save_data()` covering position, velocity, and health — **do not persist `current_state_name`**; let the state machine self-resolve on load based on `is_on_floor()`/velocity
+- [x] States (not the state machine or Player) emit gameplay `EventBus` signals (`player_jumped`, `player_landed`, `player_died`) — each state is the source of truth for when its own event is real
+- [x] Join `"saveable"` group; implement `get_save_data()` / `apply_save_data()` covering position, velocity, and health — **do not persist `current_state_name`**; let the state machine self-resolve on load based on `is_on_floor()`/velocity
 
 **Definition of Done:** Player moves/jumps correctly through all four states with correct transitions; position round-trips through save/load and the state machine resolves correctly on the first physics frame after load. State-transition tests are optional/lower priority — see `AGENTS.md` Testing Expectations.
 

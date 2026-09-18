@@ -1,0 +1,92 @@
+[gd_scene load_steps=18 format=3]
+
+[ext_resource type="Script" path="res://scenes/entities/player/player.gd" id="1_player"]
+[ext_resource type="Texture2D" path="res://icon.svg" id="2_icon"]
+[ext_resource type="Script" path="res://scenes/entities/state_machine/state_machine.gd" id="3_fsm"]
+[ext_resource type="Script" path="res://scenes/entities/player/states/idle_state.gd" id="4_idle"]
+[ext_resource type="Script" path="res://scenes/entities/player/states/run_state.gd" id="5_run"]
+[ext_resource type="Script" path="res://scenes/entities/player/states/jump_state.gd" id="6_jump"]
+[ext_resource type="Script" path="res://scenes/entities/player/states/fall_state.gd" id="7_fall"]
+[ext_resource type="Script" path="res://scenes/entities/player/states/die_state.gd" id="8_die"]
+[ext_resource type="Script" path="res://scenes/entities/components/hitbox_component.gd" id="9_hitbox"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(24, 30)
+
+[sub_resource type="Animation" id="Animation_idle"]
+resource_name = "idle"
+length = 0.5
+loop_mode = 1
+
+[sub_resource type="Animation" id="Animation_run"]
+resource_name = "run"
+length = 0.4
+loop_mode = 1
+
+[sub_resource type="Animation" id="Animation_jump"]
+resource_name = "jump"
+length = 0.2
+
+[sub_resource type="Animation" id="Animation_fall"]
+resource_name = "fall"
+length = 0.2
+
+[sub_resource type="Animation" id="Animation_die"]
+resource_name = "die"
+length = 0.5
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_main"]
+_data = {
+&"die": SubResource("Animation_die"),
+&"fall": SubResource("Animation_fall"),
+&"idle": SubResource("Animation_idle"),
+&"jump": SubResource("Animation_jump"),
+&"run": SubResource("Animation_run")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hitbox"]
+size = Vector2(26, 32)
+
+[node name="Player" type="CharacterBody2D" groups=["saveable"]]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_player")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2_icon")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_body")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_main")
+}
+
+[node name="StateMachine" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+script = ExtResource("3_fsm")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateMachine"]
+script = ExtResource("4_idle")
+
+[node name="Run" type="Node" parent="StateMachine"]
+script = ExtResource("5_run")
+
+[node name="Jump" type="Node" parent="StateMachine"]
+script = ExtResource("6_jump")
+
+[node name="Fall" type="Node" parent="StateMachine"]
+script = ExtResource("7_fall")
+
+[node name="Die" type="Node" parent="StateMachine"]
+script = ExtResource("8_die")
+
+[node name="HitboxComponent" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("9_hitbox")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
+shape = SubResource("RectangleShape2D_hitbox")

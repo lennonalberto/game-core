@@ -22,6 +22,7 @@ signal checkpoint_reached(checkpoint_id: String, position: Vector2)
 # Emitted by gameplay entities to notify UI (HUD) and managers without tight coupling.
 signal player_spawned(player: Node2D)
 signal player_jumped
+signal player_landed
 signal player_died
 signal player_health_changed(current_health: int, max_health: int)
 
