@@ -8,11 +8,11 @@ See `AGENTS.md` for architectural rules that apply throughout, and the architect
 
 ## Phase 0 — Skeleton
 
-- [x] Create full folder structure (`autoloads/`, `resources/`, `data/`, `scenes/ui/...`, `scenes/entities/...`, `scenes/levels/...`, `assets/...`)
-- [x] Register autoload scripts in Project Settings (order: EventBus, GameManager, SettingsManager, SaveManager, AchievementManager, AudioManager)
-- [x] Define initial Input Map actions (movement, jump, pause) — unbound keys are fine for now
-- [x] Write `EventBus.gd` — signal declarations only, no logic
-- [x] Install GUT (`addons/gut/`), enable the plugin, create `tests/unit/` and `tests/helpers/` folders
+- [ ] Create full folder structure (`autoloads/`, `resources/`, `data/`, `scenes/ui/...`, `scenes/entities/...`, `scenes/levels/...`, `assets/...`)
+- [ ] Register autoload scripts in Project Settings (order: EventBus, GameManager, SettingsManager, SaveManager, AchievementManager, AudioManager)
+- [ ] Define initial Input Map actions (movement, jump, pause) — unbound keys are fine for now
+- [ ] Write `EventBus.gd` — signal declarations only, no logic
+- [ ] Install GUT (`addons/gut/`), enable the plugin, create `tests/unit/` and `tests/helpers/` folders
 
 **Definition of Done:** Project opens with no errors; all autoloads are registered and empty/stubbed; `EventBus` signals are declared and visible in code completion elsewhere; GUT panel appears in the editor and runs an empty test suite successfully.
 
@@ -21,40 +21,40 @@ See `AGENTS.md` for architectural rules that apply throughout, and the architect
 ## Phase 1 — Foundational Managers
 
 ### 1. SettingsManager
-- [x] Define `SettingsData` Resource (master/music/sfx volume, keybind map, video options)
-- [x] Load/save `SettingsData` to its own file, separate from save games
-- [x] Apply volume values to audio buses
-- [x] Apply keybind values to `InputMap`
-- [x] Expose `reset_to_default()`
-- [x] Write `tests/unit/test_settings_manager.gd` covering volume changes, keybind changes, and reset-to-default
+- [ ] Define `SettingsData` Resource (master/music/sfx volume, keybind map, video options)
+- [ ] Load/save `SettingsData` to its own file, separate from save games
+- [ ] Apply volume values to audio buses
+- [ ] Apply keybind values to `InputMap`
+- [ ] Expose `reset_to_default()`
+- [ ] Write `tests/unit/test_settings_manager.gd` covering volume changes, keybind changes, and reset-to-default
 
 **Definition of Done:** Changing a value via a debug script or inspector call persists across a full editor restart; `test_settings_manager.gd` passes under GUT.
 
 ### 2. SaveManager
-- [x] Define `SaveData` Resource (player state, level id, collected items, playtime, version field)
-- [x] Implement save/load to file, support multiple slots
-- [x] Implement `"saveable"` group iteration — call `get_save_data()` / `apply_save_data()` on all members
-- [x] Test with one dummy saveable node (no real gameplay yet) — implement as `tests/helpers/dummy_saveable.gd`
-- [x] Write `tests/unit/test_save_manager.gd` covering round-trip save/load, multiple slots not clobbering each other, and graceful failure on a missing/corrupt file
+- [ ] Define `SaveData` Resource (player state, level id, collected items, playtime, version field)
+- [ ] Implement save/load to file, support multiple slots
+- [ ] Implement `"saveable"` group iteration — call `get_save_data()` / `apply_save_data()` on all members
+- [ ] Test with one dummy saveable node (no real gameplay yet) — implement as `tests/helpers/dummy_saveable.gd`
+- [ ] Write `tests/unit/test_save_manager.gd` covering round-trip save/load, multiple slots not clobbering each other, and graceful failure on a missing/corrupt file
 
 **Definition of Done:** Save then load round-trips the dummy node's state correctly after a restart; `test_save_manager.gd` passes under GUT.
 
 ### 3. AchievementManager
-- [x] Define `AchievementDefinition` Resource (id, title, description, icon, condition type/target)
-- [x] Create 2–3 sample `.tres` achievement definitions in `data/achievements/`
-- [x] Load definitions at startup, track progress in a runtime dict
-- [x] Persist unlocked/progress state to its own file (separate from save slots)
-- [x] Expose `unlock(id)`, `is_unlocked(id)`, `add_progress(id, amount)`
-- [x] Connect to relevant `EventBus` signals (even if nothing emits them yet)
-- [x] Write `tests/unit/test_achievement_manager.gd` covering progress accumulation, single-fire unlock signal, and persistence after reload
+- [ ] Define `AchievementDefinition` Resource (id, title, description, icon, condition type/target)
+- [ ] Create 2–3 sample `.tres` achievement definitions in `data/achievements/`
+- [ ] Load definitions at startup, track progress in a runtime dict
+- [ ] Persist unlocked/progress state to its own file (separate from save slots)
+- [ ] Expose `unlock(id)`, `is_unlocked(id)`, `add_progress(id, amount)`
+- [ ] Connect to relevant `EventBus` signals (even if nothing emits them yet)
+- [ ] Write `tests/unit/test_achievement_manager.gd` covering progress accumulation, single-fire unlock signal, and persistence after reload
 
 **Definition of Done:** Manually calling `unlock()` on a sample achievement persists across restart; `test_achievement_manager.gd` passes under GUT.
 
 ### 4. AudioManager
-- [x] Expose `play_sfx(id)`, `play_music(id)`, `stop_music()`
-- [x] Read volume levels from `SettingsManager`
-- [x] React to `EventBus.settings_changed` (or equivalent) to update live volume
-- [x] Write `tests/unit/test_audio_manager.gd` covering that bus volume reads correctly from `SettingsManager`
+- [ ] Expose `play_sfx(id)`, `play_music(id)`, `stop_music()`
+- [ ] Read volume levels from `SettingsManager`
+- [ ] React to `EventBus.settings_changed` (or equivalent) to update live volume
+- [ ] Write `tests/unit/test_audio_manager.gd` covering that bus volume reads correctly from `SettingsManager`
 
 **Definition of Done:** Playing a sound respects current volume settings; changing volume mid-playback updates it live; `test_audio_manager.gd` passes under GUT.
 
@@ -63,12 +63,18 @@ See `AGENTS.md` for architectural rules that apply throughout, and the architect
 ## Phase 2 — Placeholder Gameplay
 
 ### 5. Player
-- [ ] `CharacterBody2D` with movement + jump
-- [ ] Simple state machine (Idle / Run / Jump / Fall)
-- [ ] Emit `EventBus` signals on relevant events (`player_died`, `player_jumped`, etc.)
-- [ ] Join `"saveable"` group; implement `get_save_data()` / `apply_save_data()` (position, health)
+- [ ] Build the generic state machine framework under `scenes/entities/state_machine/`: `state_machine.gd` (holds `current_state`, connects to each child state's `transitioned` signal on `_ready()`, exposes `transition_to(state_name, msg := {})` and `current_state_name`) and `state.gd` (base class, `class_name State`, with `enter(msg := {})`, `exit()`, `physics_update(delta)`, `handle_input(event)`, and `signal transitioned(new_state_name, msg)`)
+- [ ] `CharacterBody2D` Player with `Sprite2D`, `CollisionShape2D`, `AnimationPlayer`, a `StateMachine` child node, and `HitboxComponent`
+- [ ] Player keeps tunable `@export` values (speed, gravity, jump_velocity); `_physics_process` delegates to `state_machine.current_state.physics_update(delta)` — no movement branching in `player.gd` itself
+- [ ] Implement four states under `scenes/entities/player/states/`: `idle_state.gd`, `run_state.gd`, `jump_state.gd`, `fall_state.gd`, each extending `State`
+  - Idle → Run (direction input), Idle → Fall (not on floor), Idle → Jump (jump pressed)
+  - Run → Idle (no direction), Run → Fall (not on floor), Run → Jump (jump pressed)
+  - Jump `enter()`: set vertical velocity, emit `EventBus.player_jumped`; transitions to Fall once velocity.y crosses zero
+  - Fall: applies gravity; on `is_on_floor()` transitions to Idle or Run depending on input, emits `EventBus.player_landed`
+- [ ] States (not the state machine or Player) emit gameplay `EventBus` signals (`player_jumped`, `player_landed`, `player_died`) — each state is the source of truth for when its own event is real
+- [ ] Join `"saveable"` group; implement `get_save_data()` / `apply_save_data()` covering position, velocity, and health — **do not persist `current_state_name`**; let the state machine self-resolve on load based on `is_on_floor()`/velocity
 
-**Definition of Done:** Player moves/jumps correctly; position round-trips through save/load.
+**Definition of Done:** Player moves/jumps correctly through all four states with correct transitions; position round-trips through save/load and the state machine resolves correctly on the first physics frame after load. State-transition tests are optional/lower priority — see `AGENTS.md` Testing Expectations.
 
 ### 6. Pickup (coin)
 - [ ] Area2D that emits `EventBus.coin_collected` on overlap with player

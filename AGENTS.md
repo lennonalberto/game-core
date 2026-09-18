@@ -21,6 +21,7 @@ Do not add game-specific content (specific story, specific art direction, specif
 5. **Settings vs. Save vs. Achievements are separate files on disk.** Never merge these persistence domains.
 6. **UI is reactive, not authoritative.** HUD and menus display state and forward input; they don't own game state.
 7. **Scenes own their scripts.** Keep `.tscn` and `.gd` together in the same folder under `scenes/`. Don't centralize all scripts in one folder.
+8. **State machines are node-based, not `match`-block FSMs.** Any entity with distinct behavioral states (Player now, enemies later) uses the shared framework under `scenes/entities/state_machine/` (`state_machine.gd` + base `state.gd`, `class_name State`). A state requests a transition by emitting its own `transitioned(new_state_name, msg)` signal — it never calls another state directly, and the state machine (not the states themselves) owns the switching logic. Entity-specific states live under that entity's own `states/` folder (e.g. `scenes/entities/player/states/`) and extend the shared `State` base — the framework itself stays entity-agnostic so it can be reused. Gameplay `EventBus` signals tied to a state transition (e.g. `player_jumped`) are emitted by the state itself, not by the state machine or the entity script, since the state is the source of truth for when that event is real. Do not persist which state an entity was in as part of its save data — let the state machine self-resolve on load from physical state (position, velocity, `is_on_floor()`) instead; only persist state-specific data (e.g. a timer) if a state actually needs it.
 
 ## Folder Structure Reference
 
@@ -32,7 +33,9 @@ data/            - .tres instances of those resources (achievement defs,
                     input defaults) + runtime save data (gitignored)
 scenes/ui/       - main_menu, hud, pause_menu, settings, achievement_popup,
                     components (reusable styled controls)
-scenes/entities/ - player, enemies, pickups
+scenes/entities/ - player, enemies, pickups, state_machine/ (shared framework:
+                    state_machine.gd + base state.gd); each stateful entity
+                    (e.g. player) has its own states/ subfolder extending State
 scenes/levels/   - playable levels, incl. platformer_demo
 assets/          - sprites, audio, fonts, themes
 ```
@@ -66,7 +69,7 @@ If a new file doesn't obviously belong in one of these, ask before inventing a n
   - SettingsManager: setting a volume updates the correct `AudioServer` bus; rebinding a key updates `InputMap`; `reset_to_default()` restores baseline values.
   - AchievementManager: progress accumulates correctly; unlocking an achievement fires its signal exactly once, not repeatedly; unlocked/progress state persists after a simulated reload.
   - EventBus: signals exist with the parameter signatures other systems expect (a contract-drift check, not behavior).
-- What NOT to test: UI layout/appearance, animations, gameplay feel (movement tuning, jump height) — verify those manually instead.
+- What NOT to test: UI layout/appearance, animations, gameplay feel (movement tuning, jump height) — verify those manually instead. State-transition logic (e.g. Player's Idle/Run/Jump/Fall states) is a lower-priority, optional test target — it requires scene instancing and physics context that's more effort than the manager tests for comparatively less payoff on placeholder gameplay.
 - **When modifying a manager's behavior, update its test file in the same change.** A manager change without a corresponding test update should be treated as incomplete, not deferred.
 - Tests should be runnable headless (`--headless -s addons/gut/gut_cmdln.gd`) so they can be run without manual interaction in the editor.
 
