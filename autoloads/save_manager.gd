@@ -22,9 +22,19 @@ var current_save: SaveData = null
 ## Whether to automatically increment current_save.playtime in _process.
 var is_tracking_playtime: bool = true
 
+## Identifier of the active level, updated via EventBus.level_started.
+var current_level_id: String = ""
+
 
 func _ready() -> void:
 	_ensure_saves_dir_exists()
+	EventBus.level_started.connect(_on_level_started)
+
+
+func _on_level_started(level_id: String) -> void:
+	current_level_id = level_id
+	if current_save != null:
+		current_save.level_id = level_id
 
 
 func _process(delta: float) -> void:
@@ -112,6 +122,9 @@ func save_game(slot: int = current_slot) -> Error:
 	if current_save == null:
 		current_save = SaveData.create_default(slot)
 
+	if current_save.level_id.is_empty() and not current_level_id.is_empty():
+		current_save.level_id = current_level_id
+
 	current_save.save_slot = slot
 	current_save.timestamp = int(Time.get_unix_time_from_system())
 
@@ -149,6 +162,7 @@ func load_game(slot: int = current_slot) -> Error:
 
 	current_save = loaded
 	current_slot = slot
+	current_level_id = loaded.level_id
 
 	# Restore state to all current nodes in the "saveable" group
 	var saveables: Array[Node] = get_tree().get_nodes_in_group(SAVEABLE_GROUP)

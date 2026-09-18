@@ -83,9 +83,9 @@ See `AGENTS.md` for architectural rules that apply throughout, and the architect
 **Definition of Done:** Collecting a coin in-game unlocks or progresses the connected achievement, end to end.
 
 ### 7. Level + checkpoint
-- [ ] Build one `TileMap` level using the placeholder player and a few coins
-- [ ] Add a checkpoint trigger that calls `SaveManager.save_game()`
-- [ ] Confirm level id is recorded in `SaveData`
+- [x] Build one `TileMap` level using the placeholder player and a few coins
+- [x] Add a checkpoint trigger that calls `SaveManager.save_game()`
+- [x] Confirm level id is recorded in `SaveData`
 
 **Definition of Done:** Hitting checkpoint → relaunching game → loading save restores player position, level, and collected coins correctly.
 

@@ -1,0 +1,84 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scenes/levels/platformer_demo/platformer_demo.gd" id="1_demo"]
+[ext_resource type="PackedScene" path="res://scenes/entities/player/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/entities/pickups/coin.tscn" id="3_coin"]
+[ext_resource type="PackedScene" path="res://scenes/entities/checkpoint/checkpoint.tscn" id="4_cp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(1000, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_plat1"]
+size = Vector2(160, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_plat2"]
+size = Vector2(160, 16)
+
+[node name="PlatformerDemo" type="Node2D" groups=["saveable"]]
+script = ExtResource("1_demo")
+
+[node name="Environment" type="Node2D" parent="."]
+
+[node name="Floor" type="StaticBody2D" parent="Environment"]
+position = Vector2(500, 316)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Floor"]
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="ColorRect" type="ColorRect" parent="Environment/Floor"]
+offset_left = -500.0
+offset_top = -16.0
+offset_right = 500.0
+offset_bottom = 16.0
+color = Color(0.2, 0.22, 0.26, 1)
+
+[node name="Platform1" type="StaticBody2D" parent="Environment"]
+position = Vector2(250, 240)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform1"]
+shape = SubResource("RectangleShape2D_plat1")
+
+[node name="ColorRect" type="ColorRect" parent="Environment/Platform1"]
+offset_left = -80.0
+offset_top = -8.0
+offset_right = 80.0
+offset_bottom = 8.0
+color = Color(0.3, 0.35, 0.42, 1)
+
+[node name="Platform2" type="StaticBody2D" parent="Environment"]
+position = Vector2(500, 180)
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Platform2"]
+shape = SubResource("RectangleShape2D_plat2")
+
+[node name="ColorRect" type="ColorRect" parent="Environment/Platform2"]
+offset_left = -80.0
+offset_top = -8.0
+offset_right = 80.0
+offset_bottom = 8.0
+color = Color(0.3, 0.35, 0.42, 1)
+
+[node name="Player" parent="." instance=ExtResource("2_player")]
+position = Vector2(80, 280)
+
+[node name="Coins" type="Node2D" parent="."]
+
+[node name="Coin1" parent="Coins" instance=ExtResource("3_coin")]
+position = Vector2(200, 280)
+save_id = "coin_demo_1"
+
+[node name="Coin2" parent="Coins" instance=ExtResource("3_coin")]
+position = Vector2(250, 210)
+save_id = "coin_demo_2"
+
+[node name="Coin3" parent="Coins" instance=ExtResource("3_coin")]
+position = Vector2(500, 150)
+save_id = "coin_demo_3"
+
+[node name="Checkpoint" parent="." instance=ExtResource("4_cp")]
+position = Vector2(400, 276)
+checkpoint_id = "cp_demo"
+save_id = "checkpoint_demo"

@@ -33,9 +33,11 @@ data/            - .tres instances of those resources (achievement defs,
                     input defaults) + runtime save data (gitignored)
 scenes/ui/       - main_menu, hud, pause_menu, settings, achievement_popup,
                     components (reusable styled controls)
-scenes/entities/ - player, enemies, pickups, state_machine/ (shared framework:
-                    state_machine.gd + base state.gd); each stateful entity
-                    (e.g. player) has its own states/ subfolder extending State
+scenes/entities/ - player, enemies, pickups, checkpoint, components/
+                    (reusable entity components like hitbox_component.gd),
+                    state_machine/ (shared framework: state_machine.gd + base
+                    state.gd); each stateful entity (e.g. player) has its own
+                    states/ subfolder extending State
 scenes/levels/   - playable levels, incl. platformer_demo
 assets/          - sprites, audio, fonts, themes
 ```
@@ -62,16 +64,17 @@ If a new file doesn't obviously belong in one of these, ask before inventing a n
 ## Testing Expectations
 
 - **Framework:** [GUT (Godot Unit Test)](https://github.com/bitwes/Gut), installed under `addons/gut/`. Tests are written in GDScript.
-- **Location:** `tests/unit/`, one file per manager, named `test_<manager_name>.gd`. Shared test fixtures (e.g. a minimal dummy node implementing the saveable contract) live in `tests/helpers/`.
-- **Every manager built in Phase 1 (SettingsManager, SaveManager, AchievementManager, AudioManager) must ship with a corresponding test file before that phase item is considered done.** This is not optional polish — it's part of the Definition of Done.
-- What to test (managers and contracts, not visuals):
-  - SaveManager: save → load round-trips a `SaveData` object correctly; multiple save slots don't clobber each other; loading a missing/corrupt file fails gracefully instead of crashing; a dummy `"saveable"` node's data is collected and restored without `SaveManager` referencing it directly.
+- **Location:** `tests/unit/`, named `test_<system_name>.gd`. Shared test fixtures (e.g. a minimal dummy node implementing the saveable contract) live in `tests/helpers/`.
+- **Existing Test Coverage:** Phase 1 managers (`test_settings_manager.gd`, `test_save_manager.gd`, `test_achievement_manager.gd`, `test_audio_manager.gd`) and Phase 2 gameplay entities (`test_state_machine.gd`, `test_player.gd`, `test_coin.gd`, `test_level.gd`). All 46 tests must pass headless.
+- What to test (managers, contracts, and core mechanics, not visuals):
+  - SaveManager: save → load round-trips a `SaveData` object correctly; multiple save slots don't clobber each other; loading a missing/corrupt file fails gracefully instead of crashing; dummy and real `"saveable"` nodes' data is collected and restored without `SaveManager` referencing them directly; `level_id` is tracked via `EventBus.level_started`.
   - SettingsManager: setting a volume updates the correct `AudioServer` bus; rebinding a key updates `InputMap`; `reset_to_default()` restores baseline values.
   - AchievementManager: progress accumulates correctly; unlocking an achievement fires its signal exactly once, not repeatedly; unlocked/progress state persists after a simulated reload.
-  - EventBus: signals exist with the parameter signatures other systems expect (a contract-drift check, not behavior).
-- What NOT to test: UI layout/appearance, animations, gameplay feel (movement tuning, jump height) — verify those manually instead. State-transition logic (e.g. Player's Idle/Run/Jump/Fall states) is a lower-priority, optional test target — it requires scene instancing and physics context that's more effort than the manager tests for comparatively less payoff on placeholder gameplay.
-- **When modifying a manager's behavior, update its test file in the same change.** A manager change without a corresponding test update should be treated as incomplete, not deferred.
-- Tests should be runnable headless (`--headless -s addons/gut/gut_cmdln.gd`) so they can be run without manual interaction in the editor.
+  - StateMachine & Player: child state discovery, state enter/exit lifecycles, apex and ground transitions, airborne self-resolution on save reload, and EventBus signal decoupling (`player_jumped`, `player_landed`, `player_died`).
+  - Pickups & Checkpoints: coin collection emits `coin_collected` and advances achievement progress; checkpoint triggers save and unlocks achievement; round-trip restores player position and collected coins.
+- What NOT to test: UI layout/appearance, animations, gameplay feel (movement tuning, jump height) — verify those manually instead.
+- **When modifying a system's behavior, update its test file in the same change.** A change without a corresponding test update should be treated as incomplete, not deferred.
+- Tests should be runnable headless (`--headless -s addons/gut/gut_cmdln.gd -gdir=res://tests/unit`) so they can be run without manual interaction in the editor.
 
 ## When Extending the Template
 
