@@ -77,8 +77,8 @@ See `AGENTS.md` for architectural rules that apply throughout, and the architect
 **Definition of Done:** Player moves/jumps correctly through all four states with correct transitions; position round-trips through save/load and the state machine resolves correctly on the first physics frame after load. State-transition tests are optional/lower priority — see `AGENTS.md` Testing Expectations.
 
 ### 6. Pickup (coin)
-- [ ] Area2D that emits `EventBus.coin_collected` on overlap with player
-- [ ] Connect a sample achievement's progress to this signal
+- [x] Area2D that emits `EventBus.coin_collected` on overlap with player
+- [x] Connect a sample achievement's progress to this signal
 
 **Definition of Done:** Collecting a coin in-game unlocks or progresses the connected achievement, end to end.
 
