@@ -38,6 +38,7 @@ func _ready() -> void:
 		hitbox_component.hit_received.connect(take_damage)
 
 	EventBus.player_spawned.emit(self)
+	EventBus.player_health_changed.emit(health, max_health)
 
 
 func _physics_process(delta: float) -> void:

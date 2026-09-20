@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" path="res://scenes/entities/player/player.tscn" id="2_player"]
 [ext_resource type="PackedScene" path="res://scenes/entities/pickups/coin.tscn" id="3_coin"]
 [ext_resource type="PackedScene" path="res://scenes/entities/checkpoint/checkpoint.tscn" id="4_cp"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud/hud.tscn" id="5_hud"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
 size = Vector2(1000, 32)
@@ -82,3 +83,5 @@ save_id = "coin_demo_3"
 position = Vector2(400, 276)
 checkpoint_id = "cp_demo"
 save_id = "checkpoint_demo"
+
+[node name="HUD" parent="." instance=ExtResource("5_hud")]

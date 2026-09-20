@@ -94,8 +94,8 @@ See `AGENTS.md` for architectural rules that apply throughout, and the architect
 ## Phase 3 — UI
 
 ### 8. HUD
-- [ ] `CanvasLayer` overlay, reactive only
-- [ ] Listens to `EventBus` for health/score-equivalent updates from placeholder gameplay
+- [x] `CanvasLayer` overlay, reactive only
+- [x] Listens to `EventBus` for health/score-equivalent updates from placeholder gameplay
 
 **Definition of Done:** HUD updates live from gameplay events without holding a direct reference to the player.
 

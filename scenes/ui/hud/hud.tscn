@@ -1,0 +1,103 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/hud/hud.gd" id="1_hud"]
+[ext_resource type="Texture2D" path="res://icon.svg" id="2_icon"]
+
+[node name="HUD" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_hud")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TopBar" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="HealthContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TopBar"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HPTitle" type="Label" parent="MarginContainer/VBoxContainer/TopBar/HealthContainer"]
+layout_mode = 2
+text = "HP:"
+
+[node name="HealthBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/TopBar/HealthContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(120, 20)
+layout_mode = 2
+size_flags_vertical = 4
+max_value = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="HealthLabel" type="Label" parent="MarginContainer/VBoxContainer/TopBar/HealthContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "100 / 100"
+
+[node name="Spacer" type="Control" parent="MarginContainer/VBoxContainer/TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="CoinsContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TopBar"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="CoinIcon" type="TextureRect" parent="MarginContainer/VBoxContainer/TopBar/CoinsContainer"]
+modulate = Color(1, 0.843137, 0.196078, 1)
+custom_minimum_size = Vector2(20, 20)
+layout_mode = 2
+size_flags_vertical = 4
+texture = ExtResource("2_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CoinTitle" type="Label" parent="MarginContainer/VBoxContainer/TopBar/CoinsContainer"]
+layout_mode = 2
+text = "Coins:"
+
+[node name="CoinLabel" type="Label" parent="MarginContainer/VBoxContainer/TopBar/CoinsContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+
+[node name="ScoreContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TopBar"]
+visible = false
+layout_mode = 2
+
+[node name="ScoreTitle" type="Label" parent="MarginContainer/VBoxContainer/TopBar/ScoreContainer"]
+layout_mode = 2
+text = "Score:"
+
+[node name="ScoreLabel" type="Label" parent="MarginContainer/VBoxContainer/TopBar/ScoreContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+
+[node name="CenterContainer" type="CenterContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="CheckpointBanner" type="Label" parent="MarginContainer/VBoxContainer/CenterContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.3, 1, 0.4, 1)
+theme_override_font_sizes/font_size = 22
+text = "Checkpoint Saved!"
