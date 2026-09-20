@@ -65,7 +65,7 @@ If a new file doesn't obviously belong in one of these, ask before inventing a n
 
 - **Framework:** [GUT (Godot Unit Test)](https://github.com/bitwes/Gut), installed under `addons/gut/`. Tests are written in GDScript.
 - **Location:** `tests/unit/`, named `test_<system_name>.gd`. Shared test fixtures (e.g. a minimal dummy node implementing the saveable contract) live in `tests/helpers/`.
-- **Existing Test Coverage:** Phase 1 managers (`test_settings_manager.gd`, `test_save_manager.gd`, `test_achievement_manager.gd`, `test_audio_manager.gd`) and Phase 2 gameplay entities (`test_state_machine.gd`, `test_player.gd`, `test_coin.gd`, `test_level.gd`). All 46 tests must pass headless.
+- **Existing Test Coverage:** Phase 1 managers (`test_settings_manager.gd`, `test_save_manager.gd`, `test_achievement_manager.gd`, `test_audio_manager.gd`), Phase 2 gameplay entities (`test_state_machine.gd`, `test_player.gd`, `test_coin.gd`, `test_level.gd`), and Phase 3 UI overlays (`test_hud.gd`, `test_achievement_popup.gd`). All 56 tests must pass headless.
 - What to test (managers, contracts, and core mechanics, not visuals):
   - SaveManager: save → load round-trips a `SaveData` object correctly; multiple save slots don't clobber each other; loading a missing/corrupt file fails gracefully instead of crashing; dummy and real `"saveable"` nodes' data is collected and restored without `SaveManager` referencing them directly; `level_id` is tracked via `EventBus.level_started`.
   - SettingsManager: setting a volume updates the correct `AudioServer` bus; rebinding a key updates `InputMap`; `reset_to_default()` restores baseline values.

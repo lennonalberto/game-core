@@ -100,8 +100,8 @@ See `AGENTS.md` for architectural rules that apply throughout, and the architect
 **Definition of Done:** HUD updates live from gameplay events without holding a direct reference to the player.
 
 ### 9. Achievement popup
-- [ ] Listens for `achievement_unlocked`
-- [ ] Queues toasts if multiple unlock at once
+- [x] Listens for `achievement_unlocked`
+- [x] Queues toasts if multiple unlock at once
 
 **Definition of Done:** Unlocking two achievements in quick succession shows both, sequentially, without overlap.
 
