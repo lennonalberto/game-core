@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://scenes/levels/platformer_demo/platformer_demo.gd" id="1_demo"]
 [ext_resource type="PackedScene" path="res://scenes/entities/player/player.tscn" id="2_player"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" path="res://scenes/entities/checkpoint/checkpoint.tscn" id="4_cp"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud/hud.tscn" id="5_hud"]
 [ext_resource type="PackedScene" path="res://scenes/ui/achievement_popup/achievement_popup.tscn" id="6_popup"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu/pause_menu.tscn" id="7_pause"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
 size = Vector2(1000, 32)
@@ -88,3 +89,5 @@ save_id = "checkpoint_demo"
 [node name="HUD" parent="." instance=ExtResource("5_hud")]
 
 [node name="AchievementPopup" parent="." instance=ExtResource("6_popup")]
+
+[node name="PauseMenu" parent="." instance=ExtResource("7_pause")]

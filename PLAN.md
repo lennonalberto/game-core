@@ -106,9 +106,9 @@ See `AGENTS.md` for architectural rules that apply throughout, and the architect
 **Definition of Done:** Unlocking two achievements in quick succession shows both, sequentially, without overlap.
 
 ### 10. Pause menu
-- [ ] Separate `CanvasLayer`, `process_mode = ALWAYS`
-- [ ] Toggled by pause input action; sets `get_tree().paused`
-- [ ] Resume / Settings / Quit to Main Menu options
+- [x] Separate `CanvasLayer`, `process_mode = ALWAYS`
+- [x] Toggled by pause input action; sets `get_tree().paused`
+- [x] Resume / Settings / Quit to Main Menu options
 
 **Definition of Done:** Pausing freezes gameplay but pause menu remains fully interactive.
 
