@@ -1,0 +1,246 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/settings/settings_menu.gd" id="1_settings"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+content_margin_left = 24.0
+content_margin_top = 20.0
+content_margin_right = 24.0
+content_margin_bottom = 20.0
+bg_color = Color(0.1, 0.12, 0.16, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.35, 0.4, 0.5, 0.8)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="SettingsMenu" type="CanvasLayer"]
+process_mode = 3
+layer = 25
+visible = false
+script = ExtResource("1_settings")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.04, 0.05, 0.07, 0.85)
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer"]
+custom_minimum_size = Vector2(500, 420)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
+theme_override_font_sizes/font_size = 22
+text = "SETTINGS"
+horizontal_alignment = 1
+
+[node name="TabContainer" type="TabContainer" parent="CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+current_tab = 0
+
+[node name="Audio" type="MarginContainer" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+metadata/_tab_index = 0
+
+[node name="AudioContent" type="VBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer/Audio"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="MasterRow" type="VBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer/Audio/AudioContent"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer/Audio/AudioContent/MasterRow"]
+layout_mode = 2
+text = "Master Volume"
+
+[node name="HBox" type="HBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer/Audio/AudioContent/MasterRow"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="MasterSlider" type="HSlider" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer/Audio/AudioContent/MasterRow/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="MasterValueLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer/Audio/AudioContent/MasterRow/HBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+text = "100%"
+horizontal_alignment = 2
+
+[node name="MusicRow" type="VBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer/Audio/AudioContent"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer/Audio/AudioContent/MusicRow"]
+layout_mode = 2
+text = "Music Volume"
+
+[node name="HBox" type="HBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer/Audio/AudioContent/MusicRow"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="MusicSlider" type="HSlider" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer/Audio/AudioContent/MusicRow/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="MusicValueLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer/Audio/AudioContent/MusicRow/HBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+text = "100%"
+horizontal_alignment = 2
+
+[node name="SFXRow" type="VBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer/Audio/AudioContent"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer/Audio/AudioContent/SFXRow"]
+layout_mode = 2
+text = "SFX Volume"
+
+[node name="HBox" type="HBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer/Audio/AudioContent/SFXRow"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="SFXSlider" type="HSlider" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer/Audio/AudioContent/SFXRow/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="SFXValueLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer/Audio/AudioContent/SFXRow/HBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(45, 0)
+layout_mode = 2
+text = "100%"
+horizontal_alignment = 2
+
+[node name="Controls" type="MarginContainer" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+metadata/_tab_index = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer/Controls"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ControlsListContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer/Controls/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="Video" type="MarginContainer" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+metadata/_tab_index = 2
+
+[node name="VideoContent" type="VBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer/Video"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="WindowModeRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer/Video/VideoContent"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer/Video/VideoContent/WindowModeRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Window Mode"
+
+[node name="WindowModeOption" type="OptionButton" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer/Video/VideoContent/WindowModeRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(180, 32)
+layout_mode = 2
+
+[node name="VSyncRow" type="HBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer/Video/VideoContent"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer/Video/VideoContent/VSyncRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "V-Sync"
+
+[node name="VSyncCheckButton" type="CheckButton" parent="CenterContainer/PanelContainer/VBoxContainer/TabContainer/Video/VideoContent/VSyncRow"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Enabled"
+
+[node name="RebindPrompt" type="PanelContainer" parent="CenterContainer/PanelContainer/VBoxContainer"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="RebindPromptLabel" type="Label" parent="CenterContainer/PanelContainer/VBoxContainer/RebindPrompt"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0.2, 1)
+text = "Press any key to rebind..."
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="FooterButtons" type="HBoxContainer" parent="CenterContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ResetButton" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/FooterButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Reset to Default"
+
+[node name="BackButton" type="Button" parent="CenterContainer/PanelContainer/VBoxContainer/FooterButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Back"

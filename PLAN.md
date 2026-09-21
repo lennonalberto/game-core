@@ -113,10 +113,10 @@ See `AGENTS.md` for architectural rules that apply throughout, and the architect
 **Definition of Done:** Pausing freezes gameplay but pause menu remains fully interactive.
 
 ### 11. Settings menu
-- [ ] Audio tab — sliders bound live to `SettingsManager`
-- [ ] Controls tab — list of rebindable actions, capture-a-key rebind flow, writes through `SettingsManager`
-- [ ] Video tab (optional) — fullscreen/resolution toggle
-- [ ] Reset to Default button
+- [x] Audio tab — sliders bound live to `SettingsManager`
+- [x] Controls tab — list of rebindable actions, capture-a-key rebind flow, writes through `SettingsManager`
+- [x] Video tab (optional) — fullscreen/resolution toggle
+- [x] Reset to Default button
 
 **Definition of Done:** Rebinding a key and changing volume both persist after restart and are reflected immediately in gameplay.
 

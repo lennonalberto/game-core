@@ -14,9 +14,11 @@ signal quit_requested
 @export var pause_action: String = "pause"
 
 @onready var backdrop: Control = %Backdrop
+@onready var main_panel: Control = %CenterContainer
 @onready var resume_button: Button = %ResumeButton
 @onready var settings_button: Button = %SettingsButton
 @onready var quit_button: Button = %QuitButton
+@onready var settings_menu: SettingsMenu = %SettingsMenu if has_node("%SettingsMenu") else null
 
 
 func _ready() -> void:
@@ -30,9 +32,17 @@ func _ready() -> void:
 	if quit_button:
 		quit_button.pressed.connect(_on_quit_button_pressed)
 
+	if settings_menu:
+		settings_menu.back_requested.connect(_on_settings_back_requested)
+
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed(pause_action):
+		if settings_menu and settings_menu.visible:
+			settings_menu.close_settings()
+			get_viewport().set_input_as_handled()
+			return
+
 		toggle_pause()
 		get_viewport().set_input_as_handled()
 
@@ -42,6 +52,11 @@ func open_pause_menu() -> void:
 	get_tree().paused = true
 	visible = true
 
+	if main_panel:
+		main_panel.visible = true
+	if settings_menu and settings_menu.visible:
+		settings_menu.visible = false
+
 	if resume_button:
 		resume_button.grab_focus()
 
@@ -50,6 +65,12 @@ func open_pause_menu() -> void:
 
 ## Unpauses the scene tree and hides the overlay.
 func close_pause_menu() -> void:
+	if settings_menu and settings_menu.visible:
+		settings_menu.close_settings()
+
+	if main_panel:
+		main_panel.visible = true
+
 	get_tree().paused = false
 	visible = false
 
@@ -71,6 +92,17 @@ func _on_resume_button_pressed() -> void:
 
 func _on_settings_button_pressed() -> void:
 	settings_requested.emit()
+	if settings_menu:
+		if main_panel:
+			main_panel.visible = false
+		settings_menu.open_settings()
+
+
+func _on_settings_back_requested() -> void:
+	if main_panel:
+		main_panel.visible = true
+	if settings_button:
+		settings_button.grab_focus()
 
 
 func _on_quit_button_pressed() -> void:
@@ -95,3 +127,7 @@ func get_settings_button() -> Button:
 
 func get_quit_button() -> Button:
 	return quit_button
+
+
+func get_settings_menu() -> SettingsMenu:
+	return settings_menu
