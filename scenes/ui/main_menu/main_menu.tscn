@@ -1,0 +1,107 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scenes/ui/main_menu/main_menu.gd" id="1_menu"]
+[ext_resource type="PackedScene" path="res://scenes/ui/settings/settings_menu.tscn" id="2_settings"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+content_margin_left = 32.0
+content_margin_top = 28.0
+content_margin_right = 32.0
+content_margin_bottom = 28.0
+bg_color = Color(0.1, 0.12, 0.16, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.35, 0.4, 0.5, 0.8)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.06, 0.07, 0.1, 1)
+
+[node name="MainButtonsContainer" type="CenterContainer" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="MainButtonsContainer"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainButtonsContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="HeaderContainer" type="VBoxContainer" parent="MainButtonsContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="TitleLabel" type="Label" parent="MainButtonsContainer/PanelContainer/VBoxContainer/HeaderContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.85, 0.3, 1)
+theme_override_font_sizes/font_size = 32
+text = "GAME CORE"
+horizontal_alignment = 1
+
+[node name="SubtitleLabel" type="Label" parent="MainButtonsContainer/PanelContainer/VBoxContainer/HeaderContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.75, 0.8, 1)
+theme_override_font_sizes/font_size = 12
+text = "A Decoupled Godot 4 2D Template"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="MainButtonsContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ButtonsList" type="VBoxContainer" parent="MainButtonsContainer/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="NewGameButton" type="Button" parent="MainButtonsContainer/PanelContainer/VBoxContainer/ButtonsList"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 38)
+layout_mode = 2
+text = "New Game"
+
+[node name="ContinueButton" type="Button" parent="MainButtonsContainer/PanelContainer/VBoxContainer/ButtonsList"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 38)
+layout_mode = 2
+text = "Continue"
+
+[node name="SettingsButton" type="Button" parent="MainButtonsContainer/PanelContainer/VBoxContainer/ButtonsList"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 38)
+layout_mode = 2
+text = "Settings"
+
+[node name="QuitButton" type="Button" parent="MainButtonsContainer/PanelContainer/VBoxContainer/ButtonsList"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 38)
+layout_mode = 2
+text = "Quit"
+
+[node name="SettingsMenu" parent="." instance=ExtResource("2_settings")]
+unique_name_in_owner = true

@@ -22,6 +22,7 @@ func after_each() -> void:
 	AchievementManager.reset_all_achievements()
 	if SaveManager.has_save(TEST_SLOT):
 		SaveManager.delete_save(TEST_SLOT)
+	SaveManager.current_slot = 1
 
 
 func test_platformer_demo_scene_structure() -> void:

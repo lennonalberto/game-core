@@ -8,6 +8,9 @@ const PAUSE_MENU_SCENE_PATH: String = "res://scenes/ui/pause_menu/pause_menu.tsc
 func after_each() -> void:
 	# Ensure tree pause state is reset between tests
 	get_tree().paused = false
+	if get_tree().current_scene is MainMenu:
+		get_tree().current_scene.queue_free()
+		get_tree().current_scene = null
 
 
 func test_pause_menu_initial_state() -> void:

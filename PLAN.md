@@ -121,9 +121,9 @@ See `AGENTS.md` for architectural rules that apply throughout, and the architect
 **Definition of Done:** Rebinding a key and changing volume both persist after restart and are reflected immediately in gameplay.
 
 ### 12. Main menu
-- [ ] New Game / Continue / Settings / Quit
-- [ ] Continue disabled/hidden if no save exists
-- [ ] Scene transitions routed through `GameManager`
+- [x] New Game / Continue / Settings / Quit
+- [x] Continue disabled/hidden if no save exists
+- [x] Scene transitions routed through `GameManager`
 
 **Definition of Done:** Full navigation loop works: Main Menu → New Game → play → pause → Settings → back → Main Menu → Continue restores correctly.
 
