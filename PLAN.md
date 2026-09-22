@@ -131,13 +131,13 @@ See `AGENTS.md` for architectural rules that apply throughout, and the architect
 
 ## Phase 4 — Integration Pass
 
-- [ ] Full loop test: Main Menu → New Game → play → checkpoint save → quit → relaunch → Continue → correct state restored
-- [ ] Settings persist independently of save slots across restart
-- [ ] Achievements persist independently of save slots across restart
-- [ ] Multiple save slots don't overwrite each other
-- [ ] No autoload holds a direct reference to another autoload where a signal would do (spot-check against `AGENTS.md` rules)
-- [ ] No gameplay node reaches directly into UI or vice versa
-- [ ] Full GUT suite (`tests/unit/`) passes headless in one run
+- [x] Full loop test: Main Menu → New Game → play → checkpoint save → quit → relaunch → Continue → correct state restored
+- [x] Settings persist independently of save slots across restart
+- [x] Achievements persist independently of save slots across restart
+- [x] Multiple save slots don't overwrite each other
+- [x] No autoload holds a direct reference to another autoload where a signal would do (spot-check against `AGENTS.md` rules)
+- [x] No gameplay node reaches directly into UI or vice versa
+- [x] Full GUT suite (`tests/unit/`) passes headless in one run
 
 **Definition of Done:** A fresh clone of the repo, run from a clean state, supports the full menu → play → save → settings → achievements loop with no manual setup beyond opening the project.
 

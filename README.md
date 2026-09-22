@@ -1,12 +1,12 @@
 # 2D Game Template (Godot 4.x)
 
-A clean, modular, and scalable starting point for 2D games in Godot 4.x. Provides foundational architecture, decoupled event-driven systems, persistent user preferences, slot-based game saves, data-driven achievements, audio management, and unit testing via GUT.
+A clean, modular, and scalable starting point for 2D games in Godot 4.x. Provides foundational architecture, decoupled event-driven systems, persistent user preferences, slot-based game saves, data-driven achievements, audio management, reactive UI overlays, and unit & integration testing via GUT.
 
 ---
 
-## Current Status: Phase 0, Phase 1 & Phase 2 Complete
+## Current Status: All Phases Complete (Phases 0 — 4)
 
-The core architectural skeleton, foundational managers, and placeholder gameplay systems have been implemented, verified, and unit-tested:
+The core architectural skeleton, foundational managers, placeholder gameplay systems, full UI suite, and end-to-end integration passes have been implemented, verified, and unit-tested:
 
 - [x] **Phase 0 — Skeleton**: Clean folder structure, autoload order, initial input map, decoupled EventBus signal hub, and GUT test runner setup.
 - [x] **Phase 1.1 — SettingsManager**: Audio bus layout, `SettingsData` resource, live `InputMap` key rebinding, display options, and isolated persistence.
@@ -16,8 +16,12 @@ The core architectural skeleton, foundational managers, and placeholder gameplay
 - [x] **Phase 2.1 — Player & State Machine**: Generic `StateMachine` framework, `CharacterBody2D` Player with movement states (`Idle`, `Run`, `Jump`, `Fall`, `Die`), `HitboxComponent`, `"saveable"` contract integration without persisting state names, and decoupled `EventBus` signals.
 - [x] **Phase 2.2 — Pickup (Coin)**: `Area2D` coin pickup, `EventBus.coin_collected` emission, end-to-end integration with `"coin_collector"` achievement, and saveable persistence.
 - [x] **Phase 2.3 — Level + Checkpoint**: `PlatformerDemo` level with platforms, player, coins, and `Checkpoint` trigger. Automatically records `level_id` into `SaveData` via `EventBus.level_started` and unlocks `"checkpoint_reached"` achievement.
-- [ ] **Phase 3 — Core UI** *(Upcoming)*
-- [ ] **Phase 4 — Integration Pass** *(Upcoming)*
+- [x] **Phase 3.1 — HUD Overlay**: Reactive `CanvasLayer` displaying health bar/label, coin counter, score, and animated checkpoint banner without direct references to gameplay entities.
+- [x] **Phase 3.2 — Achievement Popup**: Non-overlapping toast overlay with FIFO queue displaying unlocked achievements sequentially via smooth tween animations.
+- [x] **Phase 3.3 — Pause Menu**: `process_mode = PROCESS_MODE_ALWAYS` pause overlay freezing the scene tree, handling keyboard/controller/mouse navigation, with Resume, Settings, and Quit to Main Menu options.
+- [x] **Phase 3.4 — Settings Menu**: Reusable settings modal featuring Audio volume sliders, Controls tab with interactive capture-a-key rebinding, Video options (Window Mode, V-Sync), and Reset to Default.
+- [x] **Phase 3.5 — Main Menu**: Complete game entry point (`run/main_scene`) with New Game, dynamic Continue (enabled only when a save exists), embedded Settings, and Quit, routed through `GameManager`.
+- [x] **Phase 4 — Integration Pass**: End-to-end validation of the full game loop (Main Menu → Play → Checkpoint Save → Pause → Settings → Main Menu → Continue), verification of independent persistence domains, multi-slot isolation, and architectural decoupling.
 
 ---
 
@@ -67,7 +71,7 @@ Unified sound and music playback:
 - **SFX Pooling**: Pre-allocated pool of `AudioStreamPlayer` nodes on the `"SFX"` bus, dynamically expanding if exhausted.
 - **Single Source of Truth**: Delegates volume queries to `SettingsManager.get_volume()`.
 - **Live Reactivity**: Volume adjustments mid-playback update the audio bus live without interrupting playback.
-- **Registry**: Automatically registers audio files from `res://assets/audio/music/` and `res://assets/audio/sfx/`, with programmatic `register_music()` and `register_sfx()` methods.
+- **Registry**: Automatically registers audio files from `res://assets/audio/music/` and `res://assets/audio/sfx/`.
 
 ### 6. Generic State Machine Framework (`scenes/entities/state_machine/`)
 A modular, node-based finite state machine framework reusable across any entity:
@@ -78,24 +82,20 @@ A modular, node-based finite state machine framework reusable across any entity:
 ### 7. Player Entity & Components (`scenes/entities/player/`)
 A generic `CharacterBody2D` platformer player with static GDScript typing:
 - **Zero Movement Branching**: `_physics_process()` strictly delegates to `state_machine.physics_update(delta)`.
-- **Movement States**:
-  - `IdleState`: Decelerates horizontally, resolves airborne states if not on floor, transitions to `Run` or `Jump`.
-  - `RunState`: Horizontal velocity input, sprite flip orientation, transitions to `Idle`, `Jump`, or `Fall`.
-  - `JumpState`: Vertical impulse, emits `EventBus.player_jumped`, air steering, transitions to `Fall` upon vertical apex (`velocity.y >= 0`).
-  - `FallState`: Applies gravity, air steering, detects floor collision to emit `EventBus.player_landed`, and transitions to `Idle` or `Run`.
-  - `DieState`: Depleted health handler, halts movement, and emits `EventBus.player_died`.
+- **Movement States**: `IdleState`, `RunState`, `JumpState`, `FallState`, `DieState`.
 - **HitboxComponent**: Reusable `HitboxComponent` (`scenes/entities/components/hitbox_component.gd`) handling damage reception.
 - **Saveable Contract**: Persists `position`, `velocity`, and `health`. Does **not** persist state names — the state machine self-resolves dynamically on load from physical state (`is_on_floor()`, `velocity`).
 
-### 8. Collectibles & Checkpoints (`scenes/entities/pickups/`, `scenes/entities/checkpoint/`)
-- **Coin Pickup (`scenes/entities/pickups/coin.gd`)**: `Area2D` that detects player overlap, emits `EventBus.coin_collected(value)`, visually and collision-wise deactivates, and implements the `"saveable"` contract so collected coins stay collected after saving.
-- **Checkpoint Trigger (`scenes/entities/checkpoint/checkpoint.gd`)**: `Area2D` that detects player overlap, turns green, emits `EventBus.checkpoint_reached` (which automatically unlocks the `"checkpoint_reached"` achievement), triggers `SaveManager.save_game()`, and persists its state.
+### 8. Reactive UI Suite (`scenes/ui/`)
+All UI screens are strictly reactive and decoupled from authoritative game state:
+- **HUD (`scenes/ui/hud/`)**: Displays player health, coin counter, score, and animated checkpoint confirmation.
+- **Achievement Popup (`scenes/ui/achievement_popup/`)**: Queued toast notification overlay displaying unlocks sequentially without overlapping.
+- **Pause Menu (`scenes/ui/pause_menu/`)**: Pauses tree via `get_tree().paused = true` while retaining full keyboard/gamepad focus.
+- **Settings Menu (`scenes/ui/settings/`)**: Reusable settings modal with Audio sliders, Controls rebinding with capture flow, Video mode selector, and Reset to Default.
+- **Main Menu (`scenes/ui/main_menu/`)**: Configured as `run/main_scene`, offering New Game, Continue (disabled if no save exists), Settings, and Quit.
 
 ### 9. Platformer Demo Level (`scenes/levels/platformer_demo/`)
-Playable demo level (`platformer_demo.tscn`) configured as `run/main_scene`:
-- Contains solid ground and platforms, Player instance, 3 Coins (`coin_demo_1`, `coin_demo_2`, `coin_demo_3`), and Checkpoint trigger.
-- Emits `EventBus.level_started("platformer_demo")` on `_ready()`.
-- `SaveManager` automatically listens to `level_started` to record `level_id` into `SaveData` during saves, completely decoupling the level from save managers.
+Playable demo level containing solid ground, platforms, Player, Coins (`coin_demo_1`..`3`), Checkpoint trigger, HUD, AchievementPopup, and PauseMenu.
 
 ---
 
@@ -109,93 +109,21 @@ You can execute the entire test suite from the terminal:
 godot --headless -s addons/gut/gut_cmdln.gd -gdir=res://tests/unit -ginclude_subdirs -gexit
 ```
 
-### Test Coverage (46/46 Passing)
-- **`tests/unit/test_settings_manager.gd`** (6 tests):
-  - Audio bus volume updates & mute behavior
-  - Keybind rebinding & `InputMap` updates
-  - `reset_to_default()` baseline restoration
-  - Disk persistence round-trip
-  - Graceful fallback on missing file
-  - `EventBus` signal emissions
-- **`tests/unit/test_save_manager.gd`** (7 tests):
-  - `SaveData` round-trip fidelity
-  - `"saveable"` group collection & restoration via `DummySaveable` fixture
-  - Multi-slot isolation (slots 20 & 21 do not clobber each other)
-  - Graceful failure on missing file (`ERR_FILE_NOT_FOUND`)
-  - Graceful failure on corrupt file (`ERR_FILE_CORRUPT`)
-  - Metadata reading
-  - `EventBus` save/load signals
-- **`tests/unit/test_achievement_manager.gd`** (6 tests):
-  - Startup discovery of `.tres` definitions
-  - Single-fire unlock signal behavior
-  - Progressive accumulation and auto-unlock at target
-  - Unlocks and progress persistence across reload
-  - Reactive unlocking via `EventBus` signals
-  - Graceful fallback on missing file
-- **`tests/unit/test_audio_manager.gd`** (5 tests):
-  - Volume delegation to `SettingsManager`
-  - Music playback routing and stopping
-  - SFX playback pooling and pitch/volume tuning
-  - Live volume adjustments during active playback
-  - `EventBus` signal reactions
-- **`tests/unit/test_state_machine.gd`** (5 tests):
-  - Child state discovery and default initial state
-  - Explicit initial state assignment
-  - State enter/exit lifecycle and payload propagation
-  - Rejection of transitions from inactive states
-  - Idempotent self-transitions (no-op)
-- **`tests/unit/test_player.gd`** (8 tests):
-  - Scene node structure and component verification
-  - Saveable contract round-trip (position, velocity, health) without persisting state name
-  - SaveManager group integration
-  - Jump state entering emits `EventBus.player_jumped`
-  - Vertical apex transitions from Jump to Fall
-  - Hitbox damage reception and Die state transition emitting `EventBus.player_died`
-  - Airborne self-resolution upon loading mid-air save
-  - Real 2D collision landing with StaticBody2D emitting `EventBus.player_landed`
-- **`tests/unit/test_coin.gd`** (5 tests):
-  - Scene structure, components, and saveable group membership
-  - Player overlap detection, single-fire collection, and hiding
-  - Non-player body rejection
-  - End-to-end achievement progression and unlock (`coin_collector`)
-  - Saveable contract persistence round-trip via SaveManager
-- **`tests/unit/test_level.gd`** (4 tests):
-  - Platformer demo scene hierarchy and coin placement
-  - Level started signal updates `SaveManager.current_level_id`
-  - Checkpoint trigger emits `checkpoint_reached` and unlocks achievement
-  - Full cycle Definition of Done: coin collection -> checkpoint hit -> save -> reload restoring player position, level ID, and coin collection state
-
----
-
-## Project Structure
-
-```
-autoloads/           Singletons (EventBus, GameManager, SettingsManager, SaveManager, AchievementManager, AudioManager)
-resources/           Custom Resource class definitions (.gd)
-  achievements/      AchievementDefinition, AchievementSaveData
-  save/              SaveData
-  settings/          SettingsData
-data/                Resource instances (.tres) + runtime data
-  achievements/      Sample achievement definitions (first_step, coin_collector, checkpoint_reached)
-  saves/             Runtime save slots (gitignored)
-scenes/
-  main/              Game bootstrap scene
-  ui/                UI menus, HUD, pause, settings, components
-  entities/          Player, enemies, pickups, checkpoint, components, state_machine
-    checkpoint/      Checkpoint trigger (checkpoint.gd, checkpoint.tscn)
-    components/      Reusable components (hitbox_component.gd)
-    pickups/         Collectible items (coin.gd, coin.tscn)
-    player/          Player CharacterBody2D (player.gd, player.tscn, states/)
-    state_machine/   Generic FSM framework (state.gd, state_machine.gd)
-  levels/            Playable levels and demo scenes
-    platformer_demo/ PlatformerDemo level (platformer_demo.gd, platformer_demo.tscn)
-assets/              Sprites, audio (music, sfx), fonts, themes
-tests/
-  unit/              GUT unit test files (test_*.gd)
-  helpers/           Shared test fixtures (dummy_saveable.gd)
-addons/gut/          Godot Unit Test framework
-default_bus_layout.tres Audio bus configuration (Master, Music, SFX)
-```
+### Test Coverage (86/86 Passing across 14 Test Suites)
+- **`tests/unit/test_settings_manager.gd`** (6 tests): Audio bus updates, key rebinding, reset-to-default, persistence, and fallback.
+- **`tests/unit/test_save_manager.gd`** (7 tests): SaveData round-trip, saveable contract group iteration, slot isolation, and corrupt file handling.
+- **`tests/unit/test_achievement_manager.gd`** (6 tests): Definition discovery, single-fire unlocks, progressive accumulation, and reload persistence.
+- **`tests/unit/test_audio_manager.gd`** (5 tests): Volume delegation, music routing/fading, SFX pooling, and live reactivity.
+- **`tests/unit/test_state_machine.gd`** (5 tests): State discovery, enter/exit lifecycle, inactive transition rejection, and idempotency.
+- **`tests/unit/test_player.gd`** (8 tests): Components, saveable contract, jump/fall/die states, hitbox damage, and airborne resolution.
+- **`tests/unit/test_coin.gd`** (5 tests): Collection detection, achievement progress, and saveable persistence.
+- **`tests/unit/test_level.gd`** (4 tests): Platformer demo scene hierarchy, level started signals, and checkpoint save cycle.
+- **`tests/unit/test_hud.gd`** (6 tests): Reactive health, coin, score updates, checkpoint banner animation, and decoupling.
+- **`tests/unit/test_achievement_popup.gd`** (4 tests): Initial state, toast display, sequential FIFO queuing without overlap, and decoupling.
+- **`tests/unit/test_pause_menu.gd`** (9 tests): Tree freezing, always-processing UI, resume/settings/quit button actions, and decoupling.
+- **`tests/unit/test_settings_menu.gd`** (10 tests): Live audio sliders, key rebind flow, Escape-to-cancel, reset-to-default, and session persistence.
+- **`tests/unit/test_main_menu.gd`** (6 tests): Save availability detection, navigation routing via GameManager, and full loop verification.
+- **`tests/unit/test_integration.gd`** (5 tests): End-to-end lifecycle, persistence domain isolation (Settings vs Saves vs Achievements), multi-slot isolation, and architectural contracts.
 
 ---
 
@@ -214,9 +142,3 @@ default_bus_layout.tres Audio bus configuration (Master, Music, SFX)
 
 - **Godot 4.x** (Forward+ or Mobile rendering)
 - **GUT 9.x** (Included in `addons/gut/`)
-
----
-
-## License
-
-*(fill in your license here)*
